@@ -9,7 +9,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
 // Registration

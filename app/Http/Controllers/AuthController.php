@@ -55,9 +55,9 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request){
-    $request->session()->forget('user');
-    $request->session()->flush();
-    return redirect('/login');
+        session()->forget('user');
+        session()->flush();
+        return redirect('/login')->with('success', 'Logged out successfully.');
     }
     
 }   

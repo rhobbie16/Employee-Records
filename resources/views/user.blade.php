@@ -12,7 +12,6 @@
     </button>
 </div>
 
-{{-- SEARCH --}}
 <div class="mb-3">
     <input type="text" id="searchInput" class="form-control w-25" placeholder="Search by name or email...">
 </div>
@@ -69,69 +68,6 @@
                             </button>
                         </td>
                     </tr>
-
-                    {{-- EDIT MODAL --}}
-                    <div class="modal fade" id="editModal{{ $users->id }}" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Edit User</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <form action="{{ route('user.update', $users->id) }}" method="POST">
-                                    @csrf @method('PUT')
-                                    <div class="modal-body row g-3">
-                                        <div class="col-12">
-                                            <label class="form-label">Full Name</label>
-                                            <input type="text" name="fullname" class="form-control" value="{{ $users->fullname }}" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" name="email" class="form-control" value="{{ $users->email }}" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Contact</label>
-                                            <input type="text" name="contact" class="form-control" value="{{ $users->contact }}">
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Role</label>
-                                            <select name="role" class="form-select">
-                                                <option value="admin" {{ $users->role === 'admin' ? 'selected' : '' }}>Admin</option>
-                                                <option value="user" {{ $users->role === 'user' ? 'selected' : '' }}>User</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- DELETE MODAL --}}
-                    <div class="modal fade" id="deleteModal{{ $users->id }}" tabindex="-1">
-                        <div class="modal-dialog modal-sm">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Delete User</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Are you sure you want to delete <strong>{{ $users->fullname }}</strong>?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                                    <form action="{{ route('user.destroy', $users->id) }}" method="POST">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     @empty
                     <tr>
                         <td colspan="6" class="text-center text-muted py-5">
@@ -146,6 +82,94 @@
     </div>
 </div>
 
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    const filter = this.value.toLowerCase();
+    document.querySelectorAll('#userTable tbody tr').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(filter) ? '' : 'none';
+    });
+});
+
+function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('bi-eye', 'bi-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('bi-eye-slash', 'bi-eye');
+    }
+}
+</script>
+
+@endsection
+
+@push('modals')
+
+{{-- EDIT AT DELETE MODALS --}}
+@foreach($user as $users)
+<div class="modal fade" id="editModal{{ $users->id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('user.update', $users->id) }}" method="POST">
+                @csrf @method('PUT')
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="fullname" class="form-control" value="{{ $users->fullname }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ $users->email }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contact</label>
+                        <input type="text" name="contact" class="form-control" value="{{ $users->contact }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <select name="role" class="form-select">
+                            <option value="admin" {{ $users->role === 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="user" {{ $users->role === 'user' ? 'selected' : '' }}>User</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal{{ $users->id }}" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <strong>{{ $users->fullname }}</strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ route('user.destroy', $users->id) }}" method="POST">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+
 {{-- ADD MODAL --}}
 <div class="modal fade" id="addModal" tabindex="-1">
     <div class="modal-dialog">
@@ -156,24 +180,38 @@
             </div>
             <form action="{{ route('user.store') }}" method="POST">
                 @csrf
-                <div class="modal-body row g-3">
-                    <div class="col-12">
+                <div class="modal-body">
+                    <div class="mb-3">
                         <label class="form-label">Full Name</label>
                         <input type="text" name="fullname" class="form-control" required>
                     </div>
-                    <div class="col-12">
+                    <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input type="email" name="email" class="form-control" required>
                     </div>
-                    <div class="col-12">
+                    <div class="mb-3">
                         <label class="form-label">Contact</label>
                         <input type="text" name="contact" class="form-control">
                     </div>
-                    <div class="col-12">
+                    <div class="mb-3">
                         <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" required>
+                        <div class="input-group">
+                            <input type="password" name="password" id="addPassword" class="form-control" required>
+                            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('addPassword', 'eyeAdd')">
+                                <i class="bi bi-eye" id="eyeAdd"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-12">
+                    <div class="mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <input type="password" name="password_confirmation" id="addPasswordConfirm" class="form-control" required>
+                            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('addPasswordConfirm', 'eyeAddConfirm')">
+                                <i class="bi bi-eye" id="eyeAddConfirm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Role</label>
                         <select name="role" class="form-select">
                             <option value="admin">Admin</option>
@@ -190,14 +228,4 @@
     </div>
 </div>
 
-{{-- SEARCH --}}
-<script>
-document.getElementById('searchInput').addEventListener('keyup', function() {
-    const filter = this.value.toLowerCase();
-    document.querySelectorAll('#userTable tbody tr').forEach(row => {
-        row.style.display = row.textContent.toLowerCase().includes(filter) ? '' : 'none';
-    });
-});
-</script>
-
-@endsection
+@endpush

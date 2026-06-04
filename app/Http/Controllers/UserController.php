@@ -16,22 +16,22 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'fullname' => 'required',
-            'email'    => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'role'     => 'required',
-        ]);
+    $request->validate([
+        'fullname' => 'required',
+        'email'    => 'required|email|unique:users',
+        'password' => 'required|min:6|confirmed',
+        'role'     => 'required',
+    ]);
 
-        User::create([
-            'fullname' => $request->fullname,
-            'email'    => $request->email,
-            'contact'  => $request->contact,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role,
-        ]);
+    User::create([
+        'fullname' => $request->fullname,
+        'email'    => $request->email,
+        'contact'  => $request->contact,
+        'password' => Hash::make($request->password),
+        'role'     => $request->role,
+    ]);
 
-        return redirect()->route('user')->with('success', 'User added successfully!');
+    return redirect()->route('user')->with('success', 'User added successfully!');
     }
 
     public function update(Request $request, $id)

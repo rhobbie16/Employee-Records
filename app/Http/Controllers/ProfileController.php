@@ -49,6 +49,9 @@ class ProfileController extends Controller
             }
             if ($request->filled('new_password')) {
                 $user->password = Hash::make($request->new_password);
+                $user->save();
+                session(['user' => $user]);
+                return back()->with('success', 'Password has been successfully changed.');
             }
         }
 

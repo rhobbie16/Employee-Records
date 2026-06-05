@@ -38,8 +38,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 @if($users->profile_picture)
                                     <img src="{{ asset($users->profile_picture) }}"
-                                         class="rounded-circle"
-                                         style="width:32px;height:32px;object-fit:cover;">
+                                        class="rounded-circle"
+                                        style="width:32px;height:32px;object-fit:cover;">
                                 @else
                                     <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
                                          style="width:32px;height:32px;font-size:13px;">

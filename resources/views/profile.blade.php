@@ -10,8 +10,6 @@
     {{-- LEFT CARD --}}
     <div class="col-md-4">
         <div class="card border-0 shadow-sm text-center p-4">
-
-            {{-- CLICKABLE PROFILE PICTURE --}}
             <label for="profilePicTrigger" style="cursor:pointer;" title="Click to change photo">
                 @if(session('user')->profile_picture)
                     <img src="{{ asset(session('user')->profile_picture) }}"
@@ -27,7 +25,6 @@
                     <i class="bi bi-camera me-1"></i>Click to change
                 </small>
             </label>
-
             <h5 class="fw-bold mb-1">{{ session('user')->fullname }}</h5>
             <p class="text-muted mb-3" style="font-size:13px;">{{ session('user')->role ?? 'Administrator' }}</p>
             <div class="text-start border-top pt-3">
@@ -47,16 +44,15 @@
         </div>
     </div>
 
-    {{-- RIGHT CARD --}}
-    <div class="col-md-8">
+    <div class="col-md-8 d-flex flex-column gap-4">
+
+        {{-- EDIT PROFILE CARD --}}
         <div class="card border-0 shadow-sm p-4">
             <h6 class="fw-bold mb-1">Edit Profile</h6>
             <p class="text-muted mb-4" style="font-size:13px;">Update your personal details below.</p>
 
-            {{-- VALIDATION ERRORS --}}
             @if($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-circle me-2"></i>
                     <ul class="mb-0 ps-3">
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -73,7 +69,7 @@
                         <label class="form-label">Full Name</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-person"></i></span>
-                            <input type="text" name="fullname" class="form-control @error('fullname') is-invalid @enderror"
+                            <input type="text" name="fullname" class="form-control"
                                    value="{{ old('fullname', session('user')->fullname) }}" required>
                         </div>
                     </div>
@@ -81,7 +77,7 @@
                         <label class="form-label">Email Address</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                            <input type="email" name="email" class="form-control"
                                    value="{{ old('email', session('user')->email) }}" required>
                         </div>
                     </div>
@@ -112,50 +108,9 @@
                     <div class="col-12">
                         <label class="form-label">Profile Picture</label>
                         <input type="file" name="profile_picture" id="profilePicTrigger"
-                               class="form-control @error('profile_picture') is-invalid @enderror"
-                               accept="image/*">
+                               class="form-control" accept="image/*">
                         <div class="form-text">JPG, JPEG, PNG — max 2MB</div>
-                        @error('profile_picture')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
-
-                    {{-- PASSWORD SECTION --}}
-                    <div class="col-12">
-                        <hr>
-                        <p class="fw-semibold mb-3">Change Password <span class="text-muted fw-normal" style="font-size:13px;">(leave blank to keep current)</span></p>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label">Current Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                            <input type="password" name="current_password" id="currentPass" class="form-control" placeholder="Enter current password">
-                            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('currentPass', 'eyeCurrent')">
-                                <i class="bi bi-eye" id="eyeCurrent"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">New Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                            <input type="password" name="new_password" id="newPass" class="form-control" placeholder="Enter new password">
-                            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('newPass', 'eyeNew')">
-                                <i class="bi bi-eye" id="eyeNew"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Confirm New Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                            <input type="password" name="new_password_confirmation" id="confirmPass" class="form-control" placeholder="Confirm new password">
-                            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('confirmPass', 'eyeConfirm')">
-                                <i class="bi bi-eye" id="eyeConfirm"></i>
-                            </button>
-                        </div>
-                    </div>
-
                     <div class="col-12 text-end">
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-save me-1"></i> Save Changes
@@ -164,6 +119,63 @@
                 </div>
             </form>
         </div>
+
+        {{-- CHANGE PASSWORD CARD --}}
+        <div class="card border-0 shadow-sm p-4">
+            <h6 class="fw-bold mb-1">Change Password</h6>
+            <p class="text-muted mb-4" style="font-size:13px;">Leave blank if you don't want to change your password.</p>
+
+            <form action="{{ route('profile.update') }}" method="POST">
+                @csrf
+                {{-- Hidden fields para hindi mag-validate ang ibang fields --}}
+                <input type="hidden" name="fullname" value="{{ session('user')->fullname }}">
+                <input type="hidden" name="email" value="{{ session('user')->email }}">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Current Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="current_password" id="currentPass"
+                                   class="form-control" placeholder="Enter current password">
+                            <button type="button" class="btn btn-outline-secondary"
+                                    onclick="togglePassword('currentPass', 'eyeCurrent')">
+                                <i class="bi bi-eye" id="eyeCurrent"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">New Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="new_password" id="newPass"
+                                   class="form-control" placeholder="Enter new password">
+                            <button type="button" class="btn btn-outline-secondary"
+                                    onclick="togglePassword('newPass', 'eyeNew')">
+                                <i class="bi bi-eye" id="eyeNew"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm New Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="new_password_confirmation" id="confirmPass"
+                                   class="form-control" placeholder="Confirm new password">
+                            <button type="button" class="btn btn-outline-secondary"
+                                    onclick="togglePassword('confirmPass', 'eyeConfirm')">
+                                <i class="bi bi-eye" id="eyeConfirm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-key me-1"></i> Update Password
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     </div>
 
 </div>

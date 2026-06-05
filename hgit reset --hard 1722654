@@ -1,0 +1,20 @@
+[33m256b225[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fix hamburger - remove d-flex conflict
+[33mb155f95[m Force redeploy - hide hamburger on desktop
+[33m29a0171[m Fix hamburger visibility using CSS media query
+[33md2b0dc0[m Force redeploy - hide hamburger on desktop
+[33m5611b07[m Hide hamburger on desktop
+[33m1722654[m Add show/hide password toggle on login page
+[33m26b60a4[m Add show/hide password toggle on login page
+[33md8634a8[m Update forgot password page
+[33m961feaa[m Separate edit profile and change password cards
+[33m55203aa[m Add change password to profile
+[33m4a8192f[m Make layout responsive with offcanvas sidebar
+[33me1b5cdd[m Add confirm password with show/hide toggle to users
+[33mb44b1bf[m Fix APP_URL
+[33m376b7fc[m Fix logout session
+[33m6df61b2[m Fix logout
+[33m9f7d6df[m Force redeploy with session migration
+[33m932a959[m Fix session driver
+[33m30d4c66[m Force redeploy
+[33mbf992be[m Redirect root to login
+[33m565dc0d[m first commit

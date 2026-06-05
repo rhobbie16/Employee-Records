@@ -111,7 +111,6 @@
                     </div>
                     <div class="col-12">
                         <label class="form-label">Profile Picture</label>
-                        {{-- Hidden input synced with the clickable avatar label --}}
                         <input type="file" name="profile_picture" id="profilePicTrigger"
                                class="form-control @error('profile_picture') is-invalid @enderror"
                                accept="image/*">
@@ -120,6 +119,43 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    {{-- PASSWORD SECTION --}}
+                    <div class="col-12">
+                        <hr>
+                        <p class="fw-semibold mb-3">Change Password <span class="text-muted fw-normal" style="font-size:13px;">(leave blank to keep current)</span></p>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Current Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="current_password" id="currentPass" class="form-control" placeholder="Enter current password">
+                            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('currentPass', 'eyeCurrent')">
+                                <i class="bi bi-eye" id="eyeCurrent"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">New Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="new_password" id="newPass" class="form-control" placeholder="Enter new password">
+                            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('newPass', 'eyeNew')">
+                                <i class="bi bi-eye" id="eyeNew"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm New Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="new_password_confirmation" id="confirmPass" class="form-control" placeholder="Confirm new password">
+                            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('confirmPass', 'eyeConfirm')">
+                                <i class="bi bi-eye" id="eyeConfirm"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="col-12 text-end">
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-save me-1"></i> Save Changes
@@ -131,5 +167,19 @@
     </div>
 
 </div>
+
+<script>
+function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('bi-eye', 'bi-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('bi-eye-slash', 'bi-eye');
+    }
+}
+</script>
 
 @endsection

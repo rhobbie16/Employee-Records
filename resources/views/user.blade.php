@@ -36,10 +36,16 @@
                         <td>#{{ $users->id }}</td>
                         <td>
                             <div class="d-flex align-items-center gap-2">
-                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
-                                     style="width:32px;height:32px;font-size:13px;">
-                                    {{ strtoupper(substr($users->fullname, 0, 1)) }}
-                                </div>
+                                @if($users->profile_picture)
+                                    <img src="{{ asset($users->profile_picture) }}"
+                                         class="rounded-circle"
+                                         style="width:32px;height:32px;object-fit:cover;">
+                                @else
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+                                         style="width:32px;height:32px;font-size:13px;">
+                                        {{ strtoupper(substr($users->fullname, 0, 1)) }}
+                                    </div>
+                                @endif
                                 <div>
                                     <div class="fw-medium">{{ $users->fullname }}</div>
                                     <div class="text-muted" style="font-size:12px;">
